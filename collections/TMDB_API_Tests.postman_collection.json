@@ -1,0 +1,156 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+    "name": "TMDB API Tests",
+    "description": "Coleção de testes para The Movie Database API - Projeto de Capacitação",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "TC01 - Validar API Key",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Autenticação bem-sucedida\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "    pm.expect(jsonData.status_code).to.eql(1);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time menor que 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "pm.test(\"Content-Type é application/json\", function () {",
+                  "    pm.response.to.have.header('Content-Type', /application\\/json/);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/authentication?api_key={{api_key}}",
+              "host": ["{{base_url}}"],
+              "path": ["authentication"],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "{{api_key}}"
+                }
+              ]
+            },
+            "description": "Valida se a API Key configurada é válida e aceita pela TMDB API"
+          },
+          "response": []
+        },
+        {
+          "name": "TC02 - API Key Inválida (Negativo)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 401\", function () {",
+                  "    pm.response.to.have.status(401);",
+                  "});",
+                  "",
+                  "pm.test(\"Mensagem de erro apropriada\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(false);",
+                  "    pm.expect(jsonData.status_code).to.eql(7);",
+                  "    pm.expect(jsonData.status_message).to.include(\"Invalid API key\");",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/authentication?api_key=invalid_key_12345",
+              "host": ["{{base_url}}"],
+              "path": ["authentication"],
+              "query": [
+                {
+                  "key": "api_key",
+                  "value": "invalid_key_12345"
+                }
+              ]
+            },
+            "description": "Testa o comportamento da API com uma chave inválida (teste negativo)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2. Search Movie",
+      "item": [
+        {
+          "name": "TC03 - Buscar Filme Existente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Resultados encontrados\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.results).to.be.an('array');",
+                  "    pm.expect(jsonData.results.length).to.be.above(0);",
+                  "});",
+                  "",
+                  "pm.test(\"Estrutura do resultado válida\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var firstResult = jsonData.results[0];",
+                  "    pm.expect(firstResult).to.have.property('id');",
+                  "    pm.expect(firstResult).to.have.property('title');",
+                  "    pm.expect(firstResult).to.have.property('overview');",
+                  "    pm.expect(firstResult).to.have.property('release_date');",
+                  "    pm.expect(firstResult).to.have.property('vote_average');",
+                  "});",
+                  "",
+                  "pm.test(\"Salvar movie_id\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.results.length > 0) {",
+                  "        pm.environment.set(\"movie_id\", jsonData.results[0].id);",
+                  "        console.log(\"Movie ID salvo: \" + jsonData.results[0].id);",
+                  "        console.log(\"Título: \" + jsonData.results[0].title);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test(\"Validar tipos de dados\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var firstResult = jsonData.results[0];",
+                  "    pm.expect(firstResult.id).to.be.a('number');",
+                  "    pm.expect(firstResult.title).to.be.a('string');",
+                  "    pm.expect(firstResult.vote_average).to.be.a('number');",
+                  "    pm.expect(firstResult.vote_average).to.be.within(0, 10);",
+                  "});",
+                  "",
+                  "pm.test(\"Response time aceitável\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],

@@ -1,0 +1,30 @@
+# Postman
+*.postman_environment.json
+*_environment.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Node modules (if using Newman)
+node_modules/
+
+# Sensitive data
+secrets.json
+.env
+
+# Test reports
+newman/
+test-results/
+
+# Temporary files
+*.tmp
+*.bak
