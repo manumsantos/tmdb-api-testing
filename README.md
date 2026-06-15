@@ -177,8 +177,8 @@ As evidências devem incluir:
 ## 👤 Autor
 
 [Seu Nome]
-- GitHub: [@seu-usuario](https://github.com/seu-usuario)
-- LinkedIn: [Seu Perfil](https://linkedin.com/in/seu-perfil)
+- GitHub: [@manumsantos](https://github.com/manumsantos)
+- LinkedIn: [Emanueli Marques](https://www.linkedin.com/in/emanueli-marques/)
 
 ## 📝 Licença
 
